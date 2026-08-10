@@ -1,0 +1,21 @@
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+}
+
+.app__title {
+  font-size: 2rem;
+  color: var(--color-accent);
+}
+
+.app__subtitle {
+  color: var(--color-text-muted);
+}
+
+.dashboard {
+  margin-top: var(--space-lg);
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}

@@ -1,4 +1,9 @@
+@import "./base/variables.css";
+@import "./base/reset.css";
+@import "./base/layout.css";
+@import "./components/card.css";
+
 body {
-  background: #0f1220;
-  color: #e8eaf2;
+  background: var(--color-bg);
+  color: var(--color-text);
 }

@@ -1,0 +1,47 @@
+.card {
+  background: var(--color-surface);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  max-width: 260px;
+}
+
+.card__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card__status {
+  color: var(--color-text-muted);
+  font-size: 2rem;
+  margin: var(--space-md) 0;
+}
+
+.card__button {
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.card__button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 140, 255, 0.4);
+}
+
+.card__button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(108, 140, 255, 0.3);
+}
+
+.card--on {
+  outline: 2px solid var(--color-accent);
+  box-shadow: 0 0 24px rgba(108, 140, 255, 0.35);
+}

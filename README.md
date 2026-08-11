@@ -62,16 +62,6 @@ python3 -m http.server 5500
 # dann http://localhost:5500 öffnen
 ```
 
-## Was ich dabei gelernt habe
-
-Ein bewusstes Übungsprojekt, um Frontend-Grundlagen zu festigen und saubere, praxistaugliche Architektur zu lernen – Schwerpunkte:
-
-- modulare Aufteilung mit ES-Modulen und klaren Verantwortlichkeiten
-- datengesteuertes Rendern aus einem zentralen State
-- View-State & bedingtes Rendern für die Navigation
-- Persistenz mit `localStorage` und JSON
-- moderne CSS-Techniken: Design-Tokens, Grid, gestaffelte Animationen
-
 ## Lizenz
 
 Privates Portfolio-Projekt.

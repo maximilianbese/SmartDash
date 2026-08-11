@@ -26,3 +26,19 @@ export function decreaseTemperature(id) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
   }
 }
+
+export function addThermostat(name) {
+  thermostats.push({
+    id: crypto.randomUUID(),
+    name: name,
+    icon: "🌡️",
+    temperature: 20,
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
+}
+
+export function removeThermostat(id) {
+  const index = thermostats.findIndex((thermostat) => thermostat.id === id);
+  thermostats.splice(index, 1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
+}

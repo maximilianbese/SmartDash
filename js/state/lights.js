@@ -14,3 +14,19 @@ export function toggleLight(id) {
   light.isOn = !light.isOn;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
 }
+
+export function addLight(name) {
+  lights.push({
+    id: crypto.randomUUID(),
+    name: name,
+    icon: "💡",
+    isOn: false,
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
+}
+
+export function removeLight(id) {
+  const index = lights.findIndex((light) => light.id === id);
+  lights.splice(index, 1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
+}

@@ -1,21 +1,32 @@
 import { categories } from "../state/categories.js";
 import { view, selectCategory, closeCategory } from "../state/view.js";
-import { lights, toggleLight } from "../state/lights.js";
+import { lights, toggleLight, addLight, removeLight } from "../state/lights.js";
 import {
   thermostats,
   increaseTemperature,
   decreaseTemperature,
+  addThermostat,
+  removeThermostat,
 } from "../state/thermostat.js";
+
+let lastRenderedCategory;
+
+function deviceCountForCategory(categoryId) {
+  if (categoryId === "lights") return lights.length;
+  if (categoryId === "temperature") return thermostats.length;
+}
 
 function categoryCardHTML(category) {
   const isActive = view.selectedCategory === category.id;
   const cardClass = isActive
     ? "card card--clickable card--active"
     : "card card--clickable";
+  const count = deviceCountForCategory(category.id);
   return `
     <div class="${cardClass}" id="category-${category.id}">
       <p class="card__icon">${category.icon}</p>
       <p class="card__name">${category.name}</p>
+      <p class="card__count">${count} ${count === 1 ? "Raum" : "Räume"}</p>
     </div>
   `;
 }
@@ -34,8 +45,18 @@ function lightRoomCardHTML(light) {
       <p class="card__status">${status}</p>
       <div class="card__actions">
         <button class="card__button" id="toggle-${light.id}">Schalten</button>
+        <button class="card__button card__button--danger" id="delete-${light.id}">✕</button>
       </div>
     </div>
+  `;
+}
+
+function addFormHTML() {
+  return `
+    <form class="add-form" id="add-form">
+      <input class="add-form__input" id="add-input" placeholder="Neuer Raum…" />
+      <button class="add-form__button card__button" type="submit">Hinzufügen</button>
+    </form>
   `;
 }
 
@@ -48,12 +69,17 @@ function thermostatRoomCardHTML(thermostat) {
   <div class="card__actions">
   <button class="card__button" id="temp-down-${thermostat.id}">-</button>
   <button class="card__button" id="temp-up-${thermostat.id}">+</button>
+  <button class="card__button card__button--danger" id="delete-${thermostat.id}">✕</button>
+
   </div>
   </div>`;
 }
 
 export function renderDashboard() {
   const dashboard = document.getElementById("dashboard");
+
+  const viewChanged = view.selectedCategory !== lastRenderedCategory;
+  lastRenderedCategory = view.selectedCategory;
 
   const visibleCategories =
     view.selectedCategory === null
@@ -68,13 +94,21 @@ export function renderDashboard() {
 
   if (view.selectedCategory === "lights") {
     html += lights.map(lightRoomCardHTML).join("");
+    html += addFormHTML();
   }
 
   if (view.selectedCategory === "temperature") {
     html += thermostats.map(thermostatRoomCardHTML).join("");
+    html += addFormHTML();
   }
 
   dashboard.innerHTML = html;
+
+  dashboard.classList.remove("dashboard--animate");
+  if (viewChanged) {
+    void dashboard.offsetWidth;
+    dashboard.classList.add("dashboad--animate");
+  }
 
   visibleCategories.forEach((category) => {
     document
@@ -100,6 +134,23 @@ export function renderDashboard() {
           toggleLight(light.id);
           renderDashboard();
         });
+
+      document
+        .getElementById(`delete-${light.id}`)
+        .addEventListener("click", () => {
+          removeLight(light.id);
+          renderDashboard();
+        });
+    });
+
+    document.getElementById("add-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = document.getElementById("add-input");
+      const name = input.value.trim();
+      if (name !== "") {
+        addLight(name);
+        renderDashboard();
+      }
     });
   }
 
@@ -118,6 +169,23 @@ export function renderDashboard() {
           decreaseTemperature(thermostat.id);
           renderDashboard();
         });
+
+      document
+        .getElementById(`delete-${thermostat.id}`)
+        .addEventListener("click", () => {
+          removeThermostat(thermostat.id);
+          renderDashboard();
+        });
+    });
+
+    document.getElementById("add-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = document.getElementById("add-input");
+      const name = input.value.trim();
+      if (name !== "") {
+        addThermostat(name);
+        renderDashboard();
+      }
     });
   }
 }

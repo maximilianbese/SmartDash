@@ -1,22 +1,28 @@
-const STORAGE_KEY = "smartdash.livingRoomThermostat.temperature";
+const STORAGE_KEY = "smartdash.thermostats";
 const MIN_TEMP = 10;
 const MAX_TEMP = 30;
 
-export const livingRoomThermostat = {
-  name: "Wohnzimmer",
-  temperature: Number(localStorage.getItem(STORAGE_KEY)) || 21,
-};
+const defaultThermostats = [
+  { id: "living-room", name: "Wohnzimmer", icon: "🌡️", temperature: 21 },
+  { id: "kitchen", name: "Küche", icon: "🌡️", temperature: 20 },
+  { id: "bedroom", name: "Schlafzimmer", icon: "🌡️", temperature: 18 },
+];
 
-export function increaseTemperature() {
-  if (livingRoomThermostat.temperature < MAX_TEMP) {
-    livingRoomThermostat.temperature += 1;
-    localStorage.setItem(STORAGE_KEY, livingRoomThermostat.temperature);
+export const thermostats =
+  JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? defaultThermostats;
+
+export function increaseTemperature(id) {
+  const thermostat = thermostats.find((thermostat) => thermostat.id === id);
+  if (thermostat.temperature < MAX_TEMP) {
+    thermostat.temperature += 1;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
   }
 }
 
-export function decreaseTemperature() {
-  if (livingRoomThermostat.temperature > MIN_TEMP) {
-    livingRoomThermostat.temperature -= 1;
-    localStorage.setItem(STORAGE_KEY, livingRoomThermostat.temperature);
+export function decreaseTemperature(id) {
+  const thermostat = thermostats.find((thermostat) => thermostat.id === id);
+  if (thermostat.temperature > MIN_TEMP) {
+    thermostat.temperature -= 1;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
   }
 }

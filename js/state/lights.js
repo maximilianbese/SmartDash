@@ -1,11 +1,16 @@
-const STORAGE_KEY = "smartdash.livingRoomLight.isOn";
+const STORAGE_KEY = "smartdash.lights";
 
-export const livingRoomLight = {
-  name: "Wohnzimmer",
-  isOn: localStorage.getItem(STORAGE_KEY) === "true",
-};
+const defaultLights = [
+  { id: "living-room", name: "Wohnzimmer", icon: "💡", isOn: false },
+  { id: "kitchen", name: "Küche", icon: "💡", isOn: false },
+  { id: "bedroom", name: "Schlafzimmer", icon: "💡", isOn: false },
+];
 
-export function toggleLight() {
-  livingRoomLight.isOn = !livingRoomLight.isOn;
-  localStorage.setItem(STORAGE_KEY, livingRoomLight.isOn);
+export const lights =
+  JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? defaultLights;
+
+export function toggleLight(id) {
+  const light = lights.find((light) => light.id === id);
+  light.isOn = !light.isOn;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
 }

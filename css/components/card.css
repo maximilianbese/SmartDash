@@ -3,6 +3,11 @@
   padding: var(--space-lg);
   border-radius: var(--radius-md);
   max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+  text-align: center;
 }
 
 .card__name {
@@ -28,6 +33,7 @@
     transform 0.15s ease,
     box-shadow 0.15s ease,
     filter 0.15s ease;
+  min-width: 3rem;
 }
 
 .card__button:hover {
@@ -41,7 +47,62 @@
   box-shadow: 0 2px 6px rgba(108, 140, 255, 0.3);
 }
 
+.card__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.card__status {
+  color: var(--color-text-muted);
+  font-size: 2rem;
+}
+
+.card__actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: auto;
+}
+
 .card--on {
   outline: 2px solid var(--color-accent);
   box-shadow: 0 0 24px rgba(108, 140, 255, 0.35);
+}
+
+.card--clickable {
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.card--clickable:hover {
+  transform: translateY(-2px);
+}
+
+.card--active {
+  background: var(--color-accent);
+}
+
+.card--active .card__name {
+  color: white;
+}
+
+.back-button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.back-button:hover {
+  color: var(--color-text);
+  border-color: var(--color-accent);
 }

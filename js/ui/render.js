@@ -8,12 +8,14 @@ import {
   addThermostat,
   removeThermostat,
 } from "../state/thermostat.js";
+import { confirmDialog } from "./confirmDialog.js";
 
 let lastRenderedCategory;
 
 function deviceCountForCategory(categoryId) {
   if (categoryId === "lights") return lights.length;
   if (categoryId === "temperature") return thermostats.length;
+  return 0;
 }
 
 function categoryCardHTML(category) {
@@ -62,17 +64,17 @@ function addFormHTML() {
 
 function thermostatRoomCardHTML(thermostat) {
   return `
-  <div class="card">
-  <p class="card__icon">${thermostat.icon}</p>
-  <p class="card__name">${thermostat.name}</p>
-  <p class="card__status">${thermostat.temperature}°C</p>
-  <div class="card__actions">
-  <button class="card__button" id="temp-down-${thermostat.id}">-</button>
-  <button class="card__button" id="temp-up-${thermostat.id}">+</button>
-  <button class="card__button card__button--danger" id="delete-${thermostat.id}">✕</button>
-
-  </div>
-  </div>`;
+    <div class="card">
+      <p class="card__icon">${thermostat.icon}</p>
+      <p class="card__name">${thermostat.name}</p>
+      <p class="card__status">${thermostat.temperature}°C</p>
+      <div class="card__actions">
+        <button class="card__button" id="temp-down-${thermostat.id}">-</button>
+        <button class="card__button" id="temp-up-${thermostat.id}">+</button>
+        <button class="card__button card__button--danger" id="delete-${thermostat.id}">✕</button>
+      </div>
+    </div>
+  `;
 }
 
 export function renderDashboard() {
@@ -107,7 +109,7 @@ export function renderDashboard() {
   dashboard.classList.remove("dashboard--animate");
   if (viewChanged) {
     void dashboard.offsetWidth;
-    dashboard.classList.add("dashboad--animate");
+    dashboard.classList.add("dashboard--animate");
   }
 
   visibleCategories.forEach((category) => {
@@ -137,9 +139,14 @@ export function renderDashboard() {
 
       document
         .getElementById(`delete-${light.id}`)
-        .addEventListener("click", () => {
-          removeLight(light.id);
-          renderDashboard();
+        .addEventListener("click", async () => {
+          const confirmed = await confirmDialog(
+            `„${light.name}" wirklich löschen?`,
+          );
+          if (confirmed) {
+            removeLight(light.id);
+            renderDashboard();
+          }
         });
     });
 
@@ -172,9 +179,14 @@ export function renderDashboard() {
 
       document
         .getElementById(`delete-${thermostat.id}`)
-        .addEventListener("click", () => {
-          removeThermostat(thermostat.id);
-          renderDashboard();
+        .addEventListener("click", async () => {
+          const confirmed = await confirmDialog(
+            `„${thermostat.name}" wirklich löschen?`,
+          );
+          if (confirmed) {
+            removeThermostat(thermostat.id);
+            renderDashboard();
+          }
         });
     });
 

@@ -2,7 +2,7 @@
 
 Ein interaktives Smart-Home-Dashboard – gebaut mit **purem Vanilla JavaScript** (ES-Module), ganz ohne Framework und ohne Build-Schritt. SmartDash steuert Geräte nach Kategorie und Raum, merkt sich jeden Zustand und fühlt sich mit gestaffelten Animationen und einer sauber getrennten Architektur wie eine echte App an.
 
-🔗 **Live-Demo:** _https://deine-subdomain.example — hier deinen netcup-Link eintragen_
+🔗 **Live-Demo:** [smartdash.maximilian-bese.de](https://smartdash.maximilian-bese.de)
 
 ---
 

@@ -30,3 +30,10 @@ export function removeLight(id) {
   lights.splice(index, 1);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
 }
+
+export function setAllLights(isOn) {
+  lights.forEach((light) => {
+    light.isOn = isOn;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
+}

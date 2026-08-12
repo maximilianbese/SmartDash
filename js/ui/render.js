@@ -1,6 +1,12 @@
 import { categories } from "../state/categories.js";
 import { view, selectCategory, closeCategory } from "../state/view.js";
-import { lights, toggleLight, addLight, removeLight } from "../state/lights.js";
+import {
+  lights,
+  toggleLight,
+  addLight,
+  removeLight,
+  setAllLights,
+} from "../state/lights.js";
 import {
   thermostats,
   increaseTemperature,
@@ -19,13 +25,9 @@ function deviceCountForCategory(categoryId) {
 }
 
 function categoryCardHTML(category) {
-  const isActive = view.selectedCategory === category.id;
-  const cardClass = isActive
-    ? "card card--clickable card--active"
-    : "card card--clickable";
   const count = deviceCountForCategory(category.id);
   return `
-    <div class="${cardClass}" id="category-${category.id}">
+    <div class="card card--clickable" id="category-${category.id}">
       <p class="card__icon">${category.icon}</p>
       <p class="card__name">${category.name}</p>
       <p class="card__count">${count} ${count === 1 ? "Raum" : "Räume"}</p>
@@ -35,6 +37,40 @@ function categoryCardHTML(category) {
 
 function backButtonHTML() {
   return `<button class="back-button" id="back-button">← Zurück</button>`;
+}
+
+function segmentedHTML() {
+  const allOn = lights.length > 0 && lights.every((light) => light.isOn);
+  const allOff = lights.every((light) => !light.isOn);
+  const onClass = allOn
+    ? "segmented__btn segmented__btn--on segmented__btn--active"
+    : "segmented__btn segmented__btn--on";
+  const offClass = allOff
+    ? "segmented__btn segmented__btn--off segmented__btn--active"
+    : "segmented__btn segmented__btn--off";
+  return `
+    <div class="segmented">
+      <button class="${onClass}" id="all-on">An</button>
+      <button class="${offClass}" id="all-off">Aus</button>
+    </div>
+  `;
+}
+
+function detailHeaderHTML(category) {
+  const count = deviceCountForCategory(category.id);
+  const controls = category.id === "lights" ? segmentedHTML() : "";
+  return `
+    <div class="detail-header">
+      <div class="detail-header__info">
+        <span class="detail-header__icon">${category.icon}</span>
+        <div class="detail-header__text">
+          <p class="detail-header__name">${category.name}</p>
+          <p class="detail-header__count">${count} ${count === 1 ? "Raum" : "Räume"}</p>
+        </div>
+      </div>
+      ${controls}
+    </div>
+  `;
 }
 
 function lightRoomCardHTML(light) {
@@ -53,15 +89,6 @@ function lightRoomCardHTML(light) {
   `;
 }
 
-function addFormHTML() {
-  return `
-    <form class="add-form" id="add-form">
-      <input class="add-form__input" id="add-input" placeholder="Neuer Raum…" />
-      <button class="add-form__button card__button" type="submit">Hinzufügen</button>
-    </form>
-  `;
-}
-
 function thermostatRoomCardHTML(thermostat) {
   return `
     <div class="card">
@@ -77,31 +104,41 @@ function thermostatRoomCardHTML(thermostat) {
   `;
 }
 
+function addFormHTML() {
+  return `
+    <form class="add-form" id="add-form">
+      <input class="add-form__input" id="add-input" placeholder="Neuer Raum…" />
+      <button class="add-form__button card__button" type="submit">Hinzufügen</button>
+    </form>
+  `;
+}
+
 export function renderDashboard() {
   const dashboard = document.getElementById("dashboard");
 
   const viewChanged = view.selectedCategory !== lastRenderedCategory;
   lastRenderedCategory = view.selectedCategory;
 
-  const visibleCategories =
-    view.selectedCategory === null
-      ? categories
-      : categories.filter((category) => category.id === view.selectedCategory);
-
   let html = "";
-  if (view.selectedCategory !== null) {
+
+  if (view.selectedCategory === null) {
+    html += categories.map(categoryCardHTML).join("");
+  } else {
+    const activeCategory = categories.find(
+      (category) => category.id === view.selectedCategory,
+    );
     html += backButtonHTML();
+    html += detailHeaderHTML(activeCategory);
   }
-  html += visibleCategories.map(categoryCardHTML).join("");
 
   if (view.selectedCategory === "lights") {
-    html += lights.map(lightRoomCardHTML).join("");
     html += addFormHTML();
+    html += lights.map(lightRoomCardHTML).join("");
   }
 
   if (view.selectedCategory === "temperature") {
-    html += thermostats.map(thermostatRoomCardHTML).join("");
     html += addFormHTML();
+    html += thermostats.map(thermostatRoomCardHTML).join("");
   }
 
   dashboard.innerHTML = html;
@@ -112,14 +149,16 @@ export function renderDashboard() {
     dashboard.classList.add("dashboard--animate");
   }
 
-  visibleCategories.forEach((category) => {
-    document
-      .getElementById(`category-${category.id}`)
-      .addEventListener("click", () => {
-        selectCategory(category.id);
-        renderDashboard();
-      });
-  });
+  if (view.selectedCategory === null) {
+    categories.forEach((category) => {
+      document
+        .getElementById(`category-${category.id}`)
+        .addEventListener("click", () => {
+          selectCategory(category.id);
+          renderDashboard();
+        });
+    });
+  }
 
   if (view.selectedCategory !== null) {
     document.getElementById("back-button").addEventListener("click", () => {
@@ -148,6 +187,16 @@ export function renderDashboard() {
             renderDashboard();
           }
         });
+    });
+
+    document.getElementById("all-on").addEventListener("click", () => {
+      setAllLights(true);
+      renderDashboard();
+    });
+
+    document.getElementById("all-off").addEventListener("click", () => {
+      setAllLights(false);
+      renderDashboard();
     });
 
     document.getElementById("add-form").addEventListener("submit", (event) => {

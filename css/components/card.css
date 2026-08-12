@@ -1,3 +1,35 @@
+.detail-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  background: var(--color-surface);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.detail-header__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.detail-header__icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.detail-header__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.detail-header__count {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
 .card {
   background: var(--color-surface);
   padding: var(--space-lg);
@@ -52,11 +84,6 @@
   line-height: 1;
 }
 
-.card__status {
-  color: var(--color-text-muted);
-  font-size: 2rem;
-}
-
 .card__actions {
   display: flex;
   gap: var(--space-sm);
@@ -80,21 +107,9 @@
   transform: translateY(-2px);
 }
 
-.card--active {
-  background: var(--color-accent);
-}
-
-.card--active .card__name {
-  color: white;
-}
-
 .card__count {
   color: var(--color-text-muted);
   font-size: 0.9rem;
-}
-
-.card--active .card__count {
-  color: rgba(255, 255, 255, 0.8);
 }
 
 .card__button--danger {
@@ -127,6 +142,44 @@
 .back-button:hover {
   color: var(--color-text);
   border-color: var(--color-accent);
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.segmented__btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.segmented__btn--active {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.segmented__btn--on:hover {
+  background: var(--color-accent);
+  color: white;
+}
+
+.segmented__btn--off:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text);
 }
 
 .add-form {
@@ -163,7 +216,8 @@
 
 .dashboard--animate .card,
 .dashboard--animate .back-button,
-.dashboard--animate .add-form {
+.dashboard--animate .add-form,
+.dashboard--animate .detail-header {
   animation: card-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 

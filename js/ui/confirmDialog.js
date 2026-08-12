@@ -16,7 +16,12 @@ export function confirmDialog(message) {
     function close(result) {
       overlay.classList.add("modal-overlay--closing");
       setTimeout(() => overlay.remove(), 200);
+      document.removeEventListener("keydown", onKeydown);
       resolve(result);
+    }
+
+    function onKeydown(event) {
+      if (event.key === "Escape") close(false);
     }
 
     overlay.addEventListener("click", (event) => {
@@ -25,5 +30,7 @@ export function confirmDialog(message) {
       else if (action === "cancel") close(false);
       else if (event.target === overlay) close(false);
     });
+
+    document.addEventListener("keydown", onKeydown);
   });
 }

@@ -15,12 +15,14 @@ import {
   removeThermostat,
 } from "../state/thermostat.js";
 import { confirmDialog } from "./confirmDialog.js";
+import { music, toggleMusic, setMusicVolume } from "../state/music.js";
 
 let lastRenderedCategory;
 
 function deviceCountForCategory(categoryId) {
   if (categoryId === "lights") return lights.length;
   if (categoryId === "temperature") return thermostats.length;
+  if (categoryId === "music") return music.length;
   return 0;
 }
 
@@ -89,6 +91,26 @@ function lightRoomCardHTML(light) {
   `;
 }
 
+function musicRoomCardHTML(speaker) {
+  const status = speaker.isOn ? "spielt" : "aus";
+  const cardClass = speaker.isOn ? "card card--on" : "card";
+  const buttonLabel = speaker.isOn ? "Pause" : "Play";
+  const sliderClass = speaker.isOn
+    ? "card__slider"
+    : "card__slider card__slider--hidden";
+  return `
+    <div class="${cardClass}">
+      <p class="card__icon">${speaker.icon}</p>
+      <p class="card__name">${speaker.name}</p>
+      <p class="card__status">${status}</p>
+      <div class="card__actions">
+        <button class="card__button" id="toggle-music-${speaker.id}">${buttonLabel}</button>
+      </div>
+      <input type="range" class="${sliderClass}" id="volume-${speaker.id}" min="0" max="100" value="${speaker.volume}" />
+    </div>
+  `;
+}
+
 function thermostatRoomCardHTML(thermostat) {
   return `
     <div class="card">
@@ -139,6 +161,10 @@ export function renderDashboard() {
   if (view.selectedCategory === "temperature") {
     html += addFormHTML();
     html += thermostats.map(thermostatRoomCardHTML).join("");
+  }
+
+  if (view.selectedCategory === "music") {
+    html += music.map(musicRoomCardHTML).join("");
   }
 
   dashboard.innerHTML = html;
@@ -247,6 +273,23 @@ export function renderDashboard() {
         addThermostat(name);
         renderDashboard();
       }
+    });
+  }
+
+  if (view.selectedCategory === "music") {
+    music.forEach((speaker) => {
+      document
+        .getElementById(`toggle-music-${speaker.id}`)
+        .addEventListener("click", () => {
+          toggleMusic(speaker.id);
+          renderDashboard();
+        });
+
+      document
+        .getElementById(`volume-${speaker.id}`)
+        .addEventListener("input", (event) => {
+          setMusicVolume(speaker.id, Number(event.target.value));
+        });
     });
   }
 }

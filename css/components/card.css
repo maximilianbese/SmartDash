@@ -243,3 +243,23 @@
 .dashboard--animate > *:nth-child(7) {
   animation-delay: 0.3s;
 }
+
+.scene-button {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #1e2a4a, #2b1f4a);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.scene-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30, 42, 74, 0.6);
+}

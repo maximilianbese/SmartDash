@@ -15,7 +15,12 @@ import {
   removeThermostat,
 } from "../state/thermostat.js";
 import { confirmDialog } from "./confirmDialog.js";
-import { music, toggleMusic, setMusicVolume } from "../state/music.js";
+import {
+  music,
+  toggleMusic,
+  setMusicVolume,
+  setAllMusic,
+} from "../state/music.js";
 
 let lastRenderedCategory;
 
@@ -39,6 +44,10 @@ function categoryCardHTML(category) {
 
 function backButtonHTML() {
   return `<button class="back-button" id="back-button">← Zurück</button>`;
+}
+
+function goodNightButtonHTML() {
+  return `<button class="scene-button" id="good-night">🌙 Gute Nacht · alles aus</button>`;
 }
 
 function segmentedHTML() {
@@ -145,6 +154,7 @@ export function renderDashboard() {
 
   if (view.selectedCategory === null) {
     html += categories.map(categoryCardHTML).join("");
+    html += goodNightButtonHTML();
   } else {
     const activeCategory = categories.find(
       (category) => category.id === view.selectedCategory,
@@ -183,6 +193,12 @@ export function renderDashboard() {
           selectCategory(category.id);
           renderDashboard();
         });
+    });
+
+    document.getElementById("good-night").addEventListener("click", () => {
+      setAllLights(false);
+      setAllMusic(false);
+      renderDashboard();
     });
   }
 

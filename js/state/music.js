@@ -26,3 +26,10 @@ export function setMusicVolume(id, volume) {
   speaker.volume = volume;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(music));
 }
+
+export function setAllMusic(isOn) {
+  music.forEach((speaker) => {
+    speaker.isOn = isOn;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(music));
+}

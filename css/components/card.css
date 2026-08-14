@@ -293,3 +293,23 @@
   color: var(--color-text-muted);
   font-weight: 400;
 }
+
+.clock-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 var(--space-sm);
+}
+
+.clock-header__greeting {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.clock-header__time {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}

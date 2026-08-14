@@ -1,4 +1,5 @@
 // Entry point: boots the app by rendering the dashboard once.
-import { renderDashboard } from "./ui/render.js";
+import { renderDashboard, updateClock } from "./ui/render.js";
 
 renderDashboard();
+setInterval(updateClock, 1000);

@@ -144,6 +144,42 @@ function addFormHTML() {
   `;
 }
 
+function greetingForHour(stunde) {
+  if (stunde >= 5 && stunde <= 11) {
+    return "Guten Morgen ☀️";
+  } else if (stunde >= 12 && stunde <= 17) {
+    return "Guten Tag 🌤️";
+  } else if (stunde >= 18 && stunde <= 22) {
+    return "Guten Abend 🌆";
+  } else {
+    return "Gute Nacht 🌙";
+  }
+}
+
+function clockHeaderHTML() {
+  const jetzt = new Date();
+  const stunde = jetzt.getHours();
+  const minute = jetzt.getMinutes();
+  const uhrzeit = `${stunde}:${String(minute).padStart(2, "0")}`;
+
+  return `
+  <div class="clock-header">
+    <p class="clock-header__greeting">${greetingForHour(stunde)}</p>
+    <p class="clock-header__time" id="clock-time">${uhrzeit}</p>
+  </div>
+  `;
+}
+
+export function updateClock() {
+  const timeEl = document.getElementById("clock-time");
+  if (timeEl) {
+    const jetzt = new Date();
+    const stunde = jetzt.getHours();
+    const minute = jetzt.getMinutes();
+    timeEl.textContent = `${stunde}:${String(minute).padStart(2, "0")}`;
+  }
+}
+
 function statusOverviewHTML() {
   const lightsOn = lights.filter((light) => light.isOn).length;
   const musicOn = music.filter((speaker) => speaker.isOn).length;
@@ -180,6 +216,7 @@ export function renderDashboard() {
   let html = "";
 
   if (view.selectedCategory === null) {
+    html += clockHeaderHTML();
     html += statusOverviewHTML();
     html += categories.map(categoryCardHTML).join("");
     html += goodNightButtonHTML();

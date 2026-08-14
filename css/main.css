@@ -1,7 +1,10 @@
 @import "./base/variables.css";
 @import "./base/reset.css";
 @import "./base/layout.css";
+@import "./base/animations.css";
 @import "./components/card.css";
+@import "./components/header.css";
+@import "./components/controls.css";
 @import "./components/modal.css";
 
 body {

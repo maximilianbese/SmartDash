@@ -1,0 +1,36 @@
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dashboard--animate .card,
+.dashboard--animate .back-button,
+.dashboard--animate .add-form,
+.dashboard--animate .detail-header {
+  animation: card-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard--animate > *:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.dashboard--animate > *:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.dashboard--animate > *:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.dashboard--animate > *:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.dashboard--animate > *:nth-child(6) {
+  animation-delay: 0.25s;
+}
+.dashboard--animate > *:nth-child(7) {
+  animation-delay: 0.3s;
+}

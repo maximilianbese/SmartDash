@@ -10,3 +10,11 @@
   --space-sm: 0.5rem;
   --radius-md: 12px;
 }
+
+:root.theme-light {
+  --color-bg: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-text: #1a1e33;
+  --color-text-muted: #5f6478;
+  --color-accent: #4f6ef0;
+}

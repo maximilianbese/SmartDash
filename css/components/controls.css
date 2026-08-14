@@ -80,7 +80,7 @@
 .scene-button {
   grid-column: 1 / -1;
   background: linear-gradient(135deg, #1e2a4a, #2b1f4a);
-  color: var(--color-text);
+  color: #e8eaf2;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
   padding: 0.9rem 1.2rem;
@@ -95,4 +95,20 @@
 .scene-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(30, 42, 74, 0.6);
+}
+
+.theme-toggle {
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.8rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
 }

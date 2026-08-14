@@ -144,6 +144,33 @@ function addFormHTML() {
   `;
 }
 
+function statusOverviewHTML() {
+  const lightsOn = lights.filter((light) => light.isOn).length;
+  const musicOn = music.filter((speaker) => speaker.isOn).length;
+  const avgTemp =
+    thermostats.reduce(
+      (summe, thermostat) => summe + thermostat.temperature,
+      0,
+    ) / thermostats.length;
+
+  return `
+    <div class="status-overview">
+      <div class="status-card">
+        <p class="status-card__label">💡 Lichter an</p>
+        <p class="status-card__value">${lightsOn} <span class="status-card__unit">von ${lights.length}</span></p>
+      </div>
+      <div class="status-card">
+        <p class="status-card__label">🌡️ Ø Temperatur</p>
+        <p class="status-card__value">${avgTemp.toFixed(1).replace(".", ",")} <span class="status-card__unit">°C</span></p>
+      </div>
+      <div class="status-card">
+        <p class="status-card__label">🔊 Musik</p>
+        <p class="status-card__value">${musicOn} <span class="status-card__unit">spielt</span></p>
+      </div>
+    </div>
+  `;
+}
+
 export function renderDashboard() {
   const dashboard = document.getElementById("dashboard");
 
@@ -153,6 +180,7 @@ export function renderDashboard() {
   let html = "";
 
   if (view.selectedCategory === null) {
+    html += statusOverviewHTML();
     html += categories.map(categoryCardHTML).join("");
     html += goodNightButtonHTML();
   } else {

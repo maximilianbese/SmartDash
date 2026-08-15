@@ -4,6 +4,7 @@
   --color-text: #e8eaf2;
   --color-text-muted: #9aa0b5;
   --color-accent: #6c8cff;
+  --color-border: rgba(255, 255, 255, 0.08);
 
   --space-md: 1rem;
   --space-lg: 2rem;
@@ -17,4 +18,5 @@
   --color-text: #1a1e33;
   --color-text-muted: #5f6478;
   --color-accent: #4f6ef0;
+  --color-border: rgba(0, 0, 0, 0.1);
 }

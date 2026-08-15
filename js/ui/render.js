@@ -15,6 +15,7 @@ import {
   decreaseTemperature,
   addThermostat,
   removeThermostat,
+  setAllTemperatures,
 } from "../state/thermostat.js";
 import { confirmDialog } from "./confirmDialog.js";
 import {
@@ -26,7 +27,7 @@ import {
 import {
   categoryCardHTML,
   backButtonHTML,
-  goodNightButtonHTML,
+  sceneBarHTML,
   detailHeaderHTML,
   lightRoomCardHTML,
   musicRoomCardHTML,
@@ -34,9 +35,13 @@ import {
   addFormHTML,
   clockHeaderHTML,
   statusOverviewHTML,
+  searchBarHTML,
+  suggestionForHour,
+  suggestionBannerHTML,
 } from "./templates.js";
 
 let lastRenderedCategory;
+let dismissedSuggestion = null;
 
 export function renderDashboard() {
   const dashboard = document.getElementById("dashboard");
@@ -46,17 +51,22 @@ export function renderDashboard() {
 
   let html = "";
 
+  const suggestion = suggestionForHour(new Date().getHours());
+  const showSuggestion = suggestion && suggestion !== dismissedSuggestion;
+
   if (view.selectedCategory === null) {
+    if (showSuggestion) html += suggestionBannerHTML(suggestion);
     html += clockHeaderHTML();
     html += statusOverviewHTML();
     html += categories.map(categoryCardHTML).join("");
-    html += goodNightButtonHTML();
+    html += sceneBarHTML();
   } else {
     const activeCategory = categories.find(
       (category) => category.id === view.selectedCategory,
     );
     html += backButtonHTML();
     html += detailHeaderHTML(activeCategory);
+    html += searchBarHTML();
   }
 
   if (view.selectedCategory === "lights") {
@@ -97,6 +107,33 @@ export function renderDashboard() {
       setAllMusic(false);
       renderDashboard();
     });
+
+    document.getElementById("good-morning").addEventListener("click", () => {
+      setAllLights(true);
+      setAllTemperatures(21);
+      renderDashboard();
+    });
+
+    if (showSuggestion) {
+      document
+        .getElementById("suggestion-action")
+        .addEventListener("click", () => {
+          if (suggestion === "night") {
+            setAllLights(false);
+            setAllMusic(false);
+          } else {
+            setAllLights(true);
+            setAllTemperatures(21);
+          }
+          renderDashboard();
+        });
+      document
+        .getElementById("suggestion-dismiss")
+        .addEventListener("click", () => {
+          dismissedSuggestion = suggestion;
+          renderDashboard();
+        });
+    }
   }
 
   if (view.selectedCategory !== null) {
@@ -104,6 +141,21 @@ export function renderDashboard() {
       closeCategory();
       renderDashboard();
     });
+
+    const searchInput = document.getElementById("room-search");
+    const cards = document.querySelectorAll("[data-name]");
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      let visible = 0;
+      cards.forEach((card) => {
+        const matches = card.dataset.name.includes(query);
+        card.style.display = matches ? "" : "none";
+        if (matches) visible++;
+      });
+      document.getElementById("search-count").textContent =
+        `${visible} von ${cards.length}`;
+    });
+    searchInput.dispatchEvent(new Event("input"));
   }
 
   // --- Wire events: lights ---

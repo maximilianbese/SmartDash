@@ -42,3 +42,10 @@ export function removeThermostat(id) {
   thermostats.splice(index, 1);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
 }
+
+export function setAllTemperatures(temperature) {
+  thermostats.forEach((thermostat) => {
+    thermostat.temperature = temperature;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
+}

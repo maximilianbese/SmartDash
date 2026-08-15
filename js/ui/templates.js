@@ -26,8 +26,13 @@ export function backButtonHTML() {
   return `<button class="back-button" id="back-button">← Zurück</button>`;
 }
 
-export function goodNightButtonHTML() {
-  return `<button class="scene-button" id="good-night">🌙 Gute Nacht · alles aus</button>`;
+export function sceneBarHTML() {
+  return `
+    <div class="scene-bar">
+      <button class="scene-button scene-button--morning" id="good-morning">☀️ Guten Morgen · alles an</button>
+      <button class="scene-button" id="good-night">🌙 Gute Nacht · alles aus</button>
+    </div>
+  `;
 }
 
 function segmentedHTML() {
@@ -64,6 +69,15 @@ export function detailHeaderHTML(category) {
   `;
 }
 
+export function searchBarHTML() {
+  return `
+  <div class="search">
+  <input class="search-bar" id="room-search" type="search" placeholder="Raum suchen..." />
+  <span class="search__count" id="search-count"></span>
+  </div>
+  `;
+}
+
 export function lightRoomCardHTML(light) {
   const status = light.isOn ? "an" : "aus";
   const cardClass = light.isOn ? "card card--on" : "card";
@@ -72,7 +86,7 @@ export function lightRoomCardHTML(light) {
     : "card__slider card__slider--hidden";
   const iconOpacity = 0.2 + (light.brightness / 100) * 0.8;
   return `
-    <div class="${cardClass}">
+    <div class="${cardClass}" data-name="${light.name.toLowerCase()}">
       <p class="card__icon" id="light-icon-${light.id}" style="opacity: ${iconOpacity}">${light.icon}</p>
       <p class="card__name">${light.name}</p>
       <p class="card__status">${status}</p>
@@ -93,7 +107,7 @@ export function musicRoomCardHTML(speaker) {
     ? "card__slider"
     : "card__slider card__slider--hidden";
   return `
-    <div class="${cardClass}">
+    <div class="${cardClass}" data-name="${speaker.name.toLowerCase()}">
       <p class="card__icon">${speaker.icon}</p>
       <p class="card__name">${speaker.name}</p>
       <p class="card__status">${status}</p>
@@ -107,7 +121,7 @@ export function musicRoomCardHTML(speaker) {
 
 export function thermostatRoomCardHTML(thermostat) {
   return `
-    <div class="card">
+    <div class="card" data-name="${thermostat.name.toLowerCase()}">
       <p class="card__icon">${thermostat.icon}</p>
       <p class="card__name">${thermostat.name}</p>
       <p class="card__status">${thermostat.temperature}°C</p>
@@ -126,6 +140,45 @@ export function addFormHTML() {
       <input class="add-form__input" id="add-input" placeholder="Neuer Raum…" />
       <button class="add-form__button card__button" type="submit">Hinzufügen</button>
     </form>
+  `;
+}
+
+export function suggestionForHour(hour) {
+  if (hour >= 22 || hour <= 4) return "night";
+  if (hour >= 5 && hour <= 9) return "morning";
+  return null;
+}
+
+export function suggestionBannerHTML(suggestion) {
+  const text =
+    suggestion === "night"
+      ? {
+          icon: "🌙",
+          title: "Zeit fürs Bett?",
+          sub: "Gute-Nacht-Szene aktivieren und alles ausschalten.",
+          label: "Gute Nacht",
+        }
+      : {
+          icon: "☀️",
+          title: "Guten Morgen!",
+          sub: "Lichter an und Wohlfühl-Temperatur setzen.",
+          label: "Guten Morgen",
+        };
+
+  return `
+  <div class="suggestion suggestion--${suggestion}">
+  <div class="suggestion__info">
+  <span class="suggestion__icon">${text.icon}</span>
+  <div>
+  <p class="suggestion__title">${text.title}</p>
+  <p class="suggestion__sub">${text.sub}</p>
+  </div>
+  </div>
+  <div class="suggestion__actions">
+  <button class="scene-button suggestion__accept" id="suggestion-action">${text.label}</button>
+  <button class="suggestion__dismiss" id="suggestion-dismiss" aria-label="Vorschlag schließen">✕</button>
+  </div>
+  </div>
   `;
 }
 

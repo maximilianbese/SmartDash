@@ -23,7 +23,7 @@
   gap: 4px;
   padding: 4px;
   background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .segmented__btn--off:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-border);
   color: var(--color-text);
 }
 
@@ -78,7 +78,6 @@
 }
 
 .scene-button {
-  grid-column: 1 / -1;
   background: linear-gradient(135deg, #1e2a4a, #2b1f4a);
   color: #e8eaf2;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -108,7 +107,113 @@
     transform 0.15s ease,
     border-color 0.15s ease;
 }
+
 .theme-toggle:hover {
   transform: translateY(-2px);
   border-color: var(--color-accent);
+}
+
+.scene-bar {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.scene-button--morning {
+  background: linear-gradient(135deg, #f6d365, #f0a63a);
+  color: #3a2d0a;
+}
+
+.search {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.search__count {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.search-bar {
+  flex: 1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.suggestion {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.2rem;
+}
+
+.suggestion--night {
+  background: linear-gradient(135deg, #1e2a4a, #2b1f4a);
+  color: #e8eaf2;
+}
+
+.suggestion--morning {
+  background: linear-gradient(135deg, #f6d365, #f0a63a);
+  color: #3a2d0a;
+}
+
+.suggestion__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.suggestion__icon {
+  font-size: 1.6rem;
+}
+
+.suggestion__title {
+  font-weight: 600;
+}
+
+.suggestion__sub {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.suggestion__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.suggestion__accept {
+  background: var(--color-accent);
+  color: white;
+}
+
+.suggestion__dismiss {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.suggestion__dismiss:hover {
+  opacity: 1;
 }

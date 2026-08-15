@@ -7,6 +7,7 @@ import {
   addLight,
   removeLight,
   setAllLights,
+  setLightBrightness,
 } from "../state/lights.js";
 import {
   thermostats,
@@ -125,6 +126,15 @@ export function renderDashboard() {
             removeLight(light.id);
             renderDashboard();
           }
+        });
+
+      document
+        .getElementById(`brightness-${light.id}`)
+        .addEventListener("input", (event) => {
+          const value = Number(event.target.value);
+          setLightBrightness(light.id, value);
+          const icon = document.getElementById(`light-icon-${light.id}`);
+          icon.style.opacity = 0.2 + (value / 100) * 0.8;
         });
     });
 

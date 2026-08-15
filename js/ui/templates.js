@@ -67,15 +67,20 @@ export function detailHeaderHTML(category) {
 export function lightRoomCardHTML(light) {
   const status = light.isOn ? "an" : "aus";
   const cardClass = light.isOn ? "card card--on" : "card";
+  const sliderClass = light.isOn
+    ? "card__slider"
+    : "card__slider card__slider--hidden";
+  const iconOpacity = 0.2 + (light.brightness / 100) * 0.8;
   return `
     <div class="${cardClass}">
-      <p class="card__icon">${light.icon}</p>
+      <p class="card__icon" id="light-icon-${light.id}" style="opacity: ${iconOpacity}">${light.icon}</p>
       <p class="card__name">${light.name}</p>
       <p class="card__status">${status}</p>
       <div class="card__actions">
         <button class="card__button" id="toggle-${light.id}">Schalten</button>
         <button class="card__button card__button--danger" id="delete-${light.id}">✕</button>
       </div>
+      <input type="range" class="${sliderClass}" id="brightness-${light.id}" min="0" max="100" value="${light.brightness}" />
     </div>
   `;
 }

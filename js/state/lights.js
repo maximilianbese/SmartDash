@@ -1,9 +1,21 @@
 const STORAGE_KEY = "smartdash.lights";
 
 const defaultLights = [
-  { id: "living-room", name: "Wohnzimmer", icon: "💡", isOn: false },
-  { id: "kitchen", name: "Küche", icon: "💡", isOn: false },
-  { id: "bedroom", name: "Schlafzimmer", icon: "💡", isOn: false },
+  {
+    id: "living-room",
+    name: "Wohnzimmer",
+    icon: "💡",
+    isOn: false,
+    brightness: 100,
+  },
+  { id: "kitchen", name: "Küche", icon: "💡", isOn: false, brightness: 100 },
+  {
+    id: "bedroom",
+    name: "Schlafzimmer",
+    icon: "💡",
+    isOn: false,
+    brightness: 100,
+  },
 ];
 
 export const lights =
@@ -21,6 +33,7 @@ export function addLight(name) {
     name: name,
     icon: "💡",
     isOn: false,
+    brightness: 100,
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
 }
@@ -35,5 +48,11 @@ export function setAllLights(isOn) {
   lights.forEach((light) => {
     light.isOn = isOn;
   });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
+}
+
+export function setLightBrightness(id, brightness) {
+  const light = lights.find((light) => light.id === id);
+  light.brightness = brightness;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
 }

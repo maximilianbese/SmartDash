@@ -49,3 +49,14 @@ export function setAllTemperatures(temperature) {
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
 }
+
+export function moveThermostat(fromId, toId) {
+  if (fromId === toId) return;
+  const fromIndex = thermostats.findIndex(
+    (thermostat) => thermostat.id === fromId,
+  );
+  const moved = thermostats.splice(fromIndex, 1)[0];
+  const toIndex = thermostats.findIndex((thermostat) => thermostat.id === toId);
+  thermostats.splice(toIndex, 0, moved);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(thermostats));
+}

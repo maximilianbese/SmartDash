@@ -33,3 +33,12 @@ export function setAllMusic(isOn) {
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(music));
 }
+
+export function moveSpeaker(fromId, toId) {
+  if (fromId === toId) return;
+  const fromIndex = music.findIndex((speaker) => speaker.id === fromId);
+  const moved = music.splice(fromIndex, 1)[0];
+  const toIndex = music.findIndex((speaker) => speaker.id === toId);
+  music.splice(toIndex, 0, moved);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(music));
+}

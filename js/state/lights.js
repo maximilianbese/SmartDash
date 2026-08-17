@@ -56,3 +56,12 @@ export function setLightBrightness(id, brightness) {
   light.brightness = brightness;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
 }
+
+export function moveLight(fromId, toId) {
+  if (fromId === toId) return;
+  const fromIndex = lights.findIndex((light) => light.id === fromId);
+  const moved = lights.splice(fromIndex, 1)[0];
+  const toIndex = lights.findIndex((light) => light.id === toId);
+  lights.splice(toIndex, 0, moved);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lights));
+}

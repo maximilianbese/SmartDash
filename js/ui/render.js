@@ -8,6 +8,7 @@ import {
   removeLight,
   setAllLights,
   setLightBrightness,
+  moveLight,
 } from "../state/lights.js";
 import {
   thermostats,
@@ -16,6 +17,7 @@ import {
   addThermostat,
   removeThermostat,
   setAllTemperatures,
+  moveThermostat,
 } from "../state/thermostat.js";
 import { confirmDialog } from "./confirmDialog.js";
 import {
@@ -23,6 +25,7 @@ import {
   toggleMusic,
   setMusicVolume,
   setAllMusic,
+  moveSpeaker,
 } from "../state/music.js";
 import {
   categoryCardHTML,
@@ -42,6 +45,9 @@ import {
 
 let lastRenderedCategory;
 let dismissedSuggestion = null;
+let draggedLightId = null;
+let draggedThermostatId = null;
+let draggedSpeakerId = null;
 
 export function renderDashboard() {
   const dashboard = document.getElementById("dashboard");
@@ -188,6 +194,33 @@ export function renderDashboard() {
           const icon = document.getElementById(`light-icon-${light.id}`);
           icon.style.opacity = 0.2 + (value / 100) * 0.8;
         });
+
+      const card = document.getElementById(`light-card-${light.id}`);
+
+      card.addEventListener("dragstart", () => {
+        draggedLightId = light.id;
+        card.classList.add("card--dragging");
+      });
+
+      card.addEventListener("dragend", () => {
+        card.classList.remove("card--dragging");
+      });
+
+      card.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        card.classList.add("card--drop-target");
+      });
+
+      card.addEventListener("dragleave", () => {
+        card.classList.remove("card--drop-target");
+      });
+
+      card.addEventListener("drop", (event) => {
+        event.preventDefault();
+        card.classList.remove("card--drop-target");
+        moveLight(draggedLightId, light.id);
+        renderDashboard();
+      });
     });
 
     document.getElementById("all-on").addEventListener("click", () => {
@@ -239,6 +272,34 @@ export function renderDashboard() {
             renderDashboard();
           }
         });
+
+      const card = document.getElementById(`thermostat-card-${thermostat.id}`);
+
+      card.addEventListener("dragstart", () => {
+        draggedThermostatId = thermostat.id;
+        card.classList.add("card--dragging");
+      });
+
+      card.addEventListener("dragend", () => {
+        card.classList.remove("card--dragging");
+        card.classList.remove("card--drop-target");
+      });
+
+      card.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        card.classList.add("card--drop-target");
+      });
+
+      card.addEventListener("dragleave", () => {
+        card.classList.remove("card--drop-target");
+      });
+
+      card.addEventListener("drop", (event) => {
+        event.preventDefault();
+        card.classList.remove("card--drop-target");
+        moveThermostat(draggedThermostatId, thermostat.id);
+        renderDashboard();
+      });
     });
 
     document.getElementById("add-form").addEventListener("submit", (event) => {
@@ -267,6 +328,33 @@ export function renderDashboard() {
         .addEventListener("input", (event) => {
           setMusicVolume(speaker.id, Number(event.target.value));
         });
+
+      const card = document.getElementById(`music-card-${speaker.id}`);
+
+      card.addEventListener("dragstart", () => {
+        draggedSpeakerId = speaker.id;
+        card.classList.add("card--dragging");
+      });
+
+      card.addEventListener("dragend", () => {
+        card.classList.remove("card--dragging");
+      });
+
+      card.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        card.classList.add("card--drop-target");
+      });
+
+      card.addEventListener("dragleave", () => {
+        card.classList.remove("card--drop-target");
+      });
+
+      card.addEventListener("drop", (event) => {
+        event.preventDefault();
+        card.classList.remove("card--drop-target");
+        moveSpeaker(draggedSpeakerId, speaker.id);
+        renderDashboard();
+      });
     });
   }
 }
